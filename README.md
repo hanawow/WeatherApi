@@ -1,6 +1,6 @@
 # WeatherApi 
 
-An app for cities weather
+App for cities weather
 
 Install the app and run npm start (will run on port 8080):
 
