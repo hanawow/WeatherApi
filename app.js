@@ -186,8 +186,8 @@ const $W = (function () {
     init();
 
     return {
-        onCityChange: function () {
-            onCityChange();
+        onCityChange: ()=> {
+            return onCityChange();
         }
     };
 })();
