@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <title>Weather Api Server</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div>
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-3 cityDetails" id="cityData">
+            <header>Weather Api</header>
+            <div class="cityElem">
+                <label for="citySelect">Select City:</label>
+                <select id="citySelect" onchange="$W.onCityChange()">
+                </select>
+            </div>
+            <div class="cityElem">
+                <label for="description">Description:</label>
+                <output id="description"></output>
+            </div>
+            <div class="cityElem">
+                <label for="wind">Wind:</label>
+                <output id="wind"></output>
+            </div>
+            <div class="cityElem">
+                <label for="temperature">Temperature:</label>
+                <output id="temperature"></output>
+            </div>
+            <div class="cityElem">
+                <label for="humidity">Humidity:</label>
+                <output id="humidity"></output>
+            </div>
+
+        </div>
+        <div class="col-sm-8">
+            <div id="mapid">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="node_modules/leaflet/dist/leaflet.js"></script>
+<script src="svg-icon.js"></script>
+<script src="app.js"></script>
+</html>

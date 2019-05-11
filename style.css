@@ -1,0 +1,42 @@
+body {
+    padding: 20px;
+    background-color: #3c3165;
+}
+
+.cityDetails {
+    color: #21ff94;
+}
+
+select {
+    background-color: #3c3165;
+    color: #f8f8ff;
+    margin-bottom: 2px;
+}
+
+label {
+    font-family: cursive;
+    margin-bottom: 2px;
+}
+
+output {
+    color: #f8f8ff;
+}
+
+#mapid {
+    height: 80vh;
+    width: 60vw;
+}
+
+header {
+    padding-bottom: 10px;
+    font-weight: 400;
+    font-family: cursive;
+    font-size: 30px;
+}
+
+.cityElem {
+    margin-bottom: 2px;
+}
+
+
+
