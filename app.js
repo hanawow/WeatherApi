@@ -1,17 +1,23 @@
 "use strict";
 const $W = (function () {
 
-    const cityInfoMap = new Map();
+
     let currentSelectedCityId;
     let lastTimeStamp;
 
     const WEATHER_INTERVAL_MINUTES = 180;
     const WEATHER_INTERVAL_MILLISECONDS = WEATHER_INTERVAL_MINUTES * 60 * 1000;
 
+    const INITIAL_MAP_LAT = 51.505;
+    const INITIAL_MAP_LNG = -0.09;
+    const INITIAL_MAP_ZOOM = 9;
+
+    const cityErrorMessage = 'city id missing';
+
     const mapSettings = {
-        lat: 51.505,
-        lng: -0.09,
-        zoom: 9,
+        lat: INITIAL_MAP_LAT,
+        lng: INITIAL_MAP_LNG,
+        zoom: INITIAL_MAP_ZOOM,
         weatherApiBaseUrl: 'https://api.openweathermap.org/data/2.5/weather?appid=9d702b6c59ae04252971af7429287196&&units=metric',
         tileLayerUrl: 'https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',
         tileLayerOptions: {
@@ -43,7 +49,7 @@ const $W = (function () {
         zoom: 5,
         flyToOptions: {
             animate: true,
-            duration: 0.8
+            duration: 0.9
         }
     };
 
@@ -55,6 +61,8 @@ const $W = (function () {
         [6359304, 'Madrid']
     ]);
 
+    const cityInfoMap = new Map();
+
     class cityInfo {
         constructor(id, name, weather, marker) {
             this.id = id;
@@ -65,6 +73,7 @@ const $W = (function () {
     }
 
     const map = L.map('mapid').setView([mapSettings.lat, mapSettings.lng], mapSettings.zoom);
+
 
     function init() {
         lastTimeStamp = new Date().getTime();
@@ -95,12 +104,8 @@ const $W = (function () {
             handleSelectedCity(cityId);
         } else {
             fetch(mapSettings.weatherApiBaseUrl + '&id=' + cityId)
-                .then(function (response) {
-                    return response.json();
-                })
-                .then(function (weatherJson) {
-                    updateNewSelectedCity(weatherJson, cityId);
-                });
+                .then(response => response.json())
+                .then(weatherJson => updateNewSelectedCity(weatherJson, cityId));
         }
     }
 
@@ -123,8 +128,8 @@ const $W = (function () {
     }
 
     function setMarkerOnSelectedCity(cityId) {
-        if (cityInfoMap.has(cityId)) {
-            const selectedCityInfo = cityInfoMap.get(cityId);
+        const selectedCityInfo = cityInfoMap.get(cityId);
+        if (selectedCityInfo) {
             const selectedCityWeather = selectedCityInfo.weather;
             const point = L.latLng(selectedCityWeather.coord.lat, selectedCityWeather.coord.lon);
             if (selectedCityInfo.marker) {
@@ -133,17 +138,21 @@ const $W = (function () {
                 setNewMarker(point, cityId);
             }
             map.flyTo(point, goToMarkerDefinitions.zoom, goToMarkerDefinitions.flyToOptions);
-
+        } else {
+            console.log(cityErrorMessage);
         }
     }
 
     function setNewMarker(point, cityId) {
-        if (cityInfoMap.has(cityId) && point) {
+        const cityInfo = cityInfoMap.get(cityId);
+        if (cityInfo && point) {
             const marker = new L.Marker.SVGMarker(point, selectedMarkerStyle).addTo(map).on('click', e => {
                 onMarkerClick(e);
             });
             marker.cityId = cityId;
-            cityInfoMap.get(cityId).marker = marker;
+            cityInfo.marker = marker;
+        } else {
+            console.log(cityErrorMessage);
         }
     }
 
@@ -160,6 +169,8 @@ const $W = (function () {
             document.getElementById("wind").value = `speed ${cityWeather.wind.speed}, ${cityWeather.wind.speed} degrees`;
             document.getElementById("temperature").value = cityWeather.main.temp;
             document.getElementById("humidity").value = `${cityWeather.main.humidity}%`;
+        } else {
+            console.log(cityErrorMessage);
         }
     }
 
@@ -186,9 +197,7 @@ const $W = (function () {
     init();
 
     return {
-        onCityChange: ()=> {
-            return onCityChange();
-        }
+        onCityChange: () => onCityChange()
     };
 })();
 

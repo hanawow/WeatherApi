@@ -16,10 +16,12 @@ select {
 label {
     font-family: cursive;
     margin-bottom: 2px;
+    font-size: 18px;
 }
 
 output {
     color: #f8f8ff;
+    font-size: 18px;
 }
 
 #mapid {
@@ -31,7 +33,7 @@ header {
     padding-bottom: 10px;
     font-weight: 400;
     font-family: cursive;
-    font-size: 30px;
+    font-size: 32px;
 }
 
 .cityElem {
